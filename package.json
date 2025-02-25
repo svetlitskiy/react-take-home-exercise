@@ -1,6 +1,7 @@
 {
   "name": "task-manager",
   "version": "0.0.1",
+  "homepage": "https://svetlitskiy.github.io/react-take-home-exercise/",
   "private": true,
   "scripts": {
     "dev": "vite",
