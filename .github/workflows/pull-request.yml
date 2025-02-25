@@ -33,7 +33,7 @@ jobs:
       - name: Linter
         run: npm run lint
 
-      - name: Linter
+      - name: Unit tests
         run: npm run test
 
       - name: Build the React app
