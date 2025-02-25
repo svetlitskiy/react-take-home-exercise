@@ -1,5 +1,6 @@
 import React from 'react';
 import { TaskManagerTaskInterface } from '../interfaces/task-manager.interface';
+import { clsx } from 'clsx';
 
 const TaskItem = ({
   task,
@@ -7,16 +8,17 @@ const TaskItem = ({
   onToggle,
 }: {
   task: TaskManagerTaskInterface;
-  onDelete: (id: number) => void;
-  onToggle: (id: number) => void;
+  onDelete: (id: string) => void;
+  onToggle: (id: string) => void;
 }) => {
   return (
     <li className="flex items-center justify-between border-b py-2">
       <span
         onClick={() => onToggle(task.id)}
-        className={`cursor-pointer ${
-          task.completed ? 'line-through text-green-500' : 'text-black'
-        }`}
+        className={clsx(
+          `cursor-pointer`,
+          task.completed ? 'line-through text-green-500' : 'text-black',
+        )}
       >
         {task.title}
       </span>

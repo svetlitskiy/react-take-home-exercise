@@ -1,46 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TaskItem from './TaskItem';
 import { TaskManagerTaskInterface } from '../interfaces/task-manager.interface';
+import { IdbTask } from '../services/idb/idb-task';
+import { clsx } from 'clsx';
+
+enum FilterType {
+  ALL = 'All',
+  COMPLETED = 'Completed',
+  PENDING = 'Pending',
+}
 
 const TaskManager = () => {
-  const [tasks, setTasks] = useState<TaskManagerTaskInterface[]>([
-    { id: 1, title: 'Buy groceries', completed: false },
-    { id: 2, title: 'Clean the house', completed: true },
-  ]);
-  const [filter, setFilter] = useState('all');
+  const [tasks, setTasks] = useState<TaskManagerTaskInterface[]>([]);
+  const [filter, setFilter] = useState(FilterType.ALL);
   const [newTask, setNewTask] = useState<string>('');
 
   const filteredTasks = tasks.filter((task) => {
-    if (filter === 'completed') return task.completed === true;
-    if (filter === 'pending') return task.completed === false;
-    return true;
+    if (filter === FilterType.COMPLETED) return task.completed === true;
+    if (filter === FilterType.PENDING) return task.completed === false;
+    if (filter === FilterType.ALL) return true;
   });
 
-  const handleAddTask = (e: React.FormEvent) => {
+  const handleAddTask = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTask.trim() === '') return;
-    const newTaskObj: TaskManagerTaskInterface = {
-      id: tasks.length + 1,
-      title: newTask,
-      completed: false,
-    };
-    setTasks([...tasks, newTaskObj]);
-    setNewTask('');
-  };
-
-  const handleDeleteTask = (id: number) => {
-    setTasks(tasks.filter((task) => task.id !== id));
-  };
-
-  const toggleTaskCompletion = (id: number) => {
-    const newTasks: TaskManagerTaskInterface[] = [...tasks];
-    const index = newTasks.findIndex((task: TaskManagerTaskInterface) => task.id === id);
-    if (index > -1) {
-      newTasks[index].completed = !newTasks[index].completed;
-      setTasks(newTasks);
+    try {
+      if (newTask.trim() === '') return;
+      await (await IdbTask.getInstance()).add(newTask);
+      await updateTaskList();
+      setNewTask('');
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  const handleDeleteTask = async (id: string) => {
+    try {
+      await (await IdbTask.getInstance()).delete(id);
+      await updateTaskList();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const toggleTaskCompletion = (id: string) => {
+    try {
+      const newTasks: TaskManagerTaskInterface[] = [...tasks];
+      const index = newTasks.findIndex((task: TaskManagerTaskInterface) => task.id === id);
+      if (index > -1) {
+        newTasks[index].completed = !newTasks[index].completed;
+        setTasks(newTasks);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateTaskList = async (): Promise<void> => {
+    try {
+      const list = await (await IdbTask.getInstance()).list();
+      setTasks(list);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    updateTaskList();
+  }, []);
 
   return (
     <div className="container mx-auto bg-white p-4 rounded shadow">
@@ -56,14 +83,29 @@ const TaskManager = () => {
           Add
         </button>
       </form>
-      <div className="flex justify-around mb-4">
-        <button onClick={() => setFilter('all')} className="text-gray-700">
+      <div className="flex flex-row mb-4">
+        <button
+          onClick={() => setFilter(FilterType.ALL)}
+          className={clsx('flex basis-1/3 text-gray-700 justify-center', {
+            'bg-gray-200': filter === FilterType.ALL,
+          })}
+        >
           All
         </button>
-        <button onClick={() => setFilter('completed')} className="text-gray-700">
+        <button
+          onClick={() => setFilter(FilterType.COMPLETED)}
+          className={clsx('flex basis-1/3 text-gray-700 justify-center', {
+            'bg-gray-200': filter === FilterType.COMPLETED,
+          })}
+        >
           Completed
         </button>
-        <button onClick={() => setFilter('pending')} className="text-gray-700">
+        <button
+          onClick={() => setFilter(FilterType.PENDING)}
+          className={clsx('flex basis-1/3 text-gray-700 justify-center', {
+            'bg-gray-200': filter === FilterType.PENDING,
+          })}
+        >
           Pending
         </button>
       </div>
