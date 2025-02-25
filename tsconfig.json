@@ -3,7 +3,9 @@
     "moduleResolution": "node",
     "target": "ES2017",
     "jsx": "react",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["jest", "@testing-library/jest-dom"]
   },
   "include": ["**/**.ts", "**/**.tsx"],
   "exclude": ["node_modules"]

@@ -5,6 +5,7 @@ const react = require('eslint-plugin-react');
 const reactHooks = require('eslint-plugin-react-hooks');
 const prettier = require('eslint-plugin-prettier');
 const configPrettier = require('eslint-config-prettier');
+const jest = require('eslint-plugin-jest');
 
 /** @type {import("eslint").Linter.FlatConfig[]} */
 module.exports = [
@@ -16,10 +17,11 @@ module.exports = [
       sourceType: 'module',
       ecmaVersion: 'latest',
       globals: {
-        document: 'readonly', // ✅ Исправлено, теперь ESLint понимает `document`
+        document: 'readonly',
         window: 'readonly',
         localStorage: 'readonly',
         console: 'readonly',
+        jest: 'readonly',
       },
     },
     plugins: {
@@ -27,6 +29,7 @@ module.exports = [
       react,
       'react-hooks': reactHooks,
       prettier,
+      jest,
     },
     rules: {
       ...ts.configs.recommended.rules,
@@ -37,10 +40,27 @@ module.exports = [
       'react/react-in-jsx-scope': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       'no-console': 'warn',
+      'jest/no-disabled-tests': 'warn',
+      'jest/no-focused-tests': 'error',
+      'jest/no-identical-title': 'error',
+      'jest/prefer-to-have-length': 'warn',
+      'jest/valid-expect': 'error',
     },
     settings: {
       react: {
         version: 'detect',
+      },
+      jest: {
+        version: 29,
+      },
+    },
+  },
+  {
+    // Отдельная конфигурация для тестовых файлов
+    files: ['**/*.test.ts', '**/*.test.tsx'],
+    languageOptions: {
+      globals: {
+        ...jest.environments.globals.globals, // Добавляем глобальные переменные Jest
       },
     },
   },
