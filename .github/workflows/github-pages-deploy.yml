@@ -2,7 +2,7 @@ name: Deploy to Github Pages
 
 on:
   push:
-    branches: ['main', 'bugfix/#8-persistence']
+    branches: ['main', 'bugfix/#10-unit-tests']
   workflow_dispatch:
 
 env:
@@ -43,6 +43,9 @@ jobs:
 
       - name: Build the React app
         run: npm run build
+
+      - name: Linter
+        run: npm run test
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -57,4 +57,48 @@ describe('IdbTask Integration Tests', () => {
     const uninitializedIdbTask = new IdbTask();
     await expect(uninitializedIdbTask.list()).rejects.toThrow('Please initialize idb');
   });
+
+  it('should edit a task in the database', async () => {
+    const taskTitle = 'Task to Edit';
+    const addedTask = await idbTask.add(taskTitle);
+
+    const updatedTitle = 'Updated Task Title';
+    await idbTask.edit(addedTask.id, { title: updatedTitle });
+
+    const tasks = await idbTask.list();
+    const updatedTask = tasks.find((task) => task.id === addedTask.id);
+
+    expect(updatedTask).toBeDefined();
+    expect(updatedTask?.title).toBe(updatedTitle);
+  });
+
+  it('should toggle task completion status', async () => {
+    const taskTitle = 'Task to Toggle';
+    const addedTask = await idbTask.add(taskTitle);
+
+    await idbTask.edit(addedTask.id, { completed: true });
+
+    const tasks = await idbTask.list();
+    const toggledTask = tasks.find((task) => task.id === addedTask.id);
+
+    expect(toggledTask).toBeDefined();
+    expect(toggledTask?.completed).toBe(true);
+  });
+
+  it('should handle errors when editing a non-existent task', async () => {
+    const nonExistentId = 'non-existent-id';
+    await expect(idbTask.edit(nonExistentId, { title: 'New Title' })).resolves.not.toThrow();
+  });
+
+  it('should handle errors when adding a task to an uninitialized database', async () => {
+    const uninitializedIdbTask = new IdbTask();
+    await expect(uninitializedIdbTask.add('New Task')).rejects.toThrow('Please initialize idb');
+  });
+
+  it('should handle errors when editing a task in an uninitialized database', async () => {
+    const uninitializedIdbTask = new IdbTask();
+    await expect(uninitializedIdbTask.edit('some-id', { title: 'New Title' })).rejects.toThrow(
+      'Please initialize idb',
+    );
+  });
 });
