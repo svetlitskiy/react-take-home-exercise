@@ -95,6 +95,25 @@ export class IdbTask {
     }
   }
 
+  public async edit(
+    id: string,
+    data: Partial<Omit<TaskManagerTaskInterface, 'id'>>,
+  ): Promise<void> {
+    if (!this._idb) {
+      throw new Error('Please initialize idb');
+    }
+    try {
+      const transaction = this._idb.transaction('task', 'readwrite');
+      const store = transaction.objectStore('task');
+      const item = await store.get(id);
+      await store.put({ ...item, ...data }, id);
+      await transaction.done;
+    } catch (error) {
+      console.error('Error while deleting task:', error);
+      throw error;
+    }
+  }
+
   public async list(): Promise<TaskManagerTaskInterface[]> {
     if (!this._idb) {
       throw new Error('Please initialize idb');

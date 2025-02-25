@@ -43,13 +43,13 @@ const TaskManager = () => {
     }
   };
 
-  const toggleTaskCompletion = (id: string) => {
+  const toggleTaskCompletion = async (id: string) => {
     try {
       const newTasks: TaskManagerTaskInterface[] = [...tasks];
       const index = newTasks.findIndex((task: TaskManagerTaskInterface) => task.id === id);
       if (index > -1) {
-        newTasks[index].completed = !newTasks[index].completed;
-        setTasks(newTasks);
+        await (await IdbTask.getInstance()).edit(id, { completed: !newTasks[index].completed });
+        await updateTaskList();
       }
     } catch (error) {
       console.error(error);
