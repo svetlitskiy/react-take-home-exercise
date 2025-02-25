@@ -1,5 +1,5 @@
 export interface TaskManagerTaskInterface {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
 }

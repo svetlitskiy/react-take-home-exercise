@@ -13,8 +13,11 @@
     "format": "npm run lint:fix && npm run lint:prettier"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "idb": "^8.0.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
