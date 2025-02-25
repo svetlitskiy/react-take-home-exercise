@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const TaskItem = ({ task, onDelete, onToggle }: any) => {
   return (
@@ -6,7 +6,7 @@ const TaskItem = ({ task, onDelete, onToggle }: any) => {
       <span
         onClick={() => onToggle(task.id)}
         className={`cursor-pointer ${
-          task.isCompleted ? "text-black" : "line-through text-green-500"
+          task.isCompleted ? 'text-black' : 'line-through text-green-500'
         }`}
       >
         {task.title}
@@ -15,10 +15,10 @@ const TaskItem = ({ task, onDelete, onToggle }: any) => {
       <button
         onClick={() => onDelete(task.id)}
         style={{
-          backgroundColor: "red",
-          color: "white",
-          padding: "4px 8px",
-          borderRadius: "4px",
+          backgroundColor: 'red',
+          color: 'white',
+          padding: '4px 8px',
+          borderRadius: '4px',
         }}
       >
         Delete

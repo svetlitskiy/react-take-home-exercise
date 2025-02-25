@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "ES2017",
+    "jsx": "react",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["**/**.ts", "**/**.tsx"],
+  "exclude": ["node_modules"]
+}
