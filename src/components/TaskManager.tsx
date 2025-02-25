@@ -1,48 +1,45 @@
 import React, { useState } from 'react';
 
 import TaskItem from './TaskItem';
+import { TaskManagerTaskInterface } from '../interfaces/task-manager.interface';
 
 const TaskManager = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [tasks, setTasks] = useState<any[]>([
+  const [tasks, setTasks] = useState<TaskManagerTaskInterface[]>([
     { id: 1, title: 'Buy groceries', completed: false },
     { id: 2, title: 'Clean the house', completed: true },
   ]);
   const [filter, setFilter] = useState('all');
-  const [newTask, setNewTask] = useState<string>();
+  const [newTask, setNewTask] = useState<string>('');
 
-  // Intentional bug: The filter conditions are reversed.
   const filteredTasks = tasks.filter((task) => {
-    if (filter === 'completed') return task.completed === false;
-    if (filter === 'pending') return task.completed === true;
+    if (filter === 'completed') return task.completed === true;
+    if (filter === 'pending') return task.completed === false;
     return true;
   });
 
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTask!.trim() === '') return;
-    const newTaskObj = {
+    if (newTask.trim() === '') return;
+    const newTaskObj: TaskManagerTaskInterface = {
       id: tasks.length + 1,
-      name: newTask,
+      title: newTask,
       completed: false,
     };
     setTasks([...tasks, newTaskObj]);
     setNewTask('');
   };
 
-  // Intentional bug: Directly mutating the tasks array when deleting.
   const handleDeleteTask = (id: number) => {
-    const index = tasks.findIndex((task) => task.id === id);
-    if (index !== -1) {
-      tasks.splice(index, 1);
-      setTasks(tasks);
-    }
+    setTasks(tasks.filter((task) => task.id !== id));
   };
 
   const toggleTaskCompletion = (id: number) => {
-    const task = tasks.find((task) => task.id === id);
-
-    task.isCompleted = !task.isCompleted;
+    const newTasks: TaskManagerTaskInterface[] = [...tasks];
+    const index = newTasks.findIndex((task: TaskManagerTaskInterface) => task.id === id);
+    if (index > -1) {
+      newTasks[index].completed = !newTasks[index].completed;
+      setTasks(newTasks);
+    }
   };
 
   return (
