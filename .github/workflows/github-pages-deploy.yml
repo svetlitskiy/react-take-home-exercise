@@ -2,7 +2,7 @@ name: Deploy to Github Pages
 
 on:
   push:
-    branches: ['main', 'bugfix/#5-fix-bugs'] # FIXME remove bugfix/#5-fix-bugs
+    branches: ['main']
   workflow_dispatch:
 
 env:
