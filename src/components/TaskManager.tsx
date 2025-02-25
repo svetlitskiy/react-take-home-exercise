@@ -1,32 +1,32 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import TaskItem from "./TaskItem";
+import TaskItem from './TaskItem';
 
 const TaskManager = () => {
   const [tasks, setTasks] = useState<any[]>([
-    { id: 1, title: "Buy groceries", completed: false },
-    { id: 2, title: "Clean the house", completed: true },
+    { id: 1, title: 'Buy groceries', completed: false },
+    { id: 2, title: 'Clean the house', completed: true },
   ]);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState('all');
   const [newTask, setNewTask] = useState<string>();
 
   // Intentional bug: The filter conditions are reversed.
   const filteredTasks = tasks.filter((task) => {
-    if (filter === "completed") return task.completed === false;
-    if (filter === "pending") return task.completed === true;
+    if (filter === 'completed') return task.completed === false;
+    if (filter === 'pending') return task.completed === true;
     return true;
   });
 
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newTask!.trim() === "") return;
+    if (newTask!.trim() === '') return;
     const newTaskObj = {
       id: tasks.length + 1,
       name: newTask,
       completed: false,
     };
     setTasks([...tasks, newTaskObj]);
-    setNewTask("");
+    setNewTask('');
   };
 
   // Intentional bug: Directly mutating the tasks array when deleting.
@@ -59,16 +59,13 @@ const TaskManager = () => {
         </button>
       </form>
       <div className="flex justify-around mb-4">
-        <button onClick={() => setFilter("all")} className="text-gray-700">
+        <button onClick={() => setFilter('all')} className="text-gray-700">
           All
         </button>
-        <button
-          onClick={() => setFilter("completed")}
-          className="text-gray-700"
-        >
+        <button onClick={() => setFilter('completed')} className="text-gray-700">
           Completed
         </button>
-        <button onClick={() => setFilter("pending")} className="text-gray-700">
+        <button onClick={() => setFilter('pending')} className="text-gray-700">
           Pending
         </button>
       </div>
