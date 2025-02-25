@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TaskItem from './TaskItem';
 
 const TaskManager = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [tasks, setTasks] = useState<any[]>([
     { id: 1, title: 'Buy groceries', completed: false },
     { id: 2, title: 'Clean the house', completed: true },
