@@ -5,6 +5,9 @@ on:
     branches: ['main', 'feat/#3-github-pages'] # FIXME only for check deploy, return back to main branch
   workflow_dispatch:
 
+env:
+  VITE_APP_HOME_URL: /react-take-home-exercise
+
 permissions:
   contents: read
   pages: write
